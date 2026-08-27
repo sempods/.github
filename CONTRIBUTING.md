@@ -123,6 +123,27 @@ closed. Review is the scarce resource on a one-maintainer project.
 Security issues do **not** go in public issues. See
 [`SECURITY.md`](https://github.com/sempods/.github/blob/main/SECURITY.md).
 
+### If push protection blocks your push
+
+Push protection scans what you are pushing and refuses commits that carry something
+shaped like a credential. The refusal is the system working: the secret has not reached
+GitHub.
+
+**Deleting the line and committing again does not clear it.** The earlier commit is still
+part of the push and still contains the secret, so the next attempt fails for the same
+reason. Rewrite the history instead — `git commit --amend` if it was the last commit, an
+interactive rebase if it was further back.
+
+**If the credential was real, rotate it.** It has existed in a working tree, possibly on a
+shared machine, possibly in a backup. Taking it out of the history does not un-know it.
+
+**If it is a false positive** — a test fixture, an example key, a public identifier that
+merely looks secret — the block message links to a form for saying so. Name which of those
+it is; the bypass is recorded either way, and "it's fine" is not a reason.
+
+None of this needs reporting as a vulnerability. The moment it does, because a real
+credential did reach a public branch, the channel above is the one to use.
+
 ## Code of conduct
 
 Participation is governed by
