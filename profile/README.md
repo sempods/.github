@@ -34,17 +34,12 @@ you get the resource, not an API response shaped for one client.
 | | |
 |---|---|
 | **[www.sempods.org](https://www.sempods.org)** | what this is, and why — start here if you are new |
-| **[spec.sempods.org](https://spec.sempods.org)** | the specification: what a pod must do, 313 requirements over six core chapters and three modules |
+| **[spec.sempods.org](https://spec.sempods.org)** | the specification: what a pod must do — a core every pod implements, and modules it may |
 | **[Try the API](https://spec.sempods.org/api/index.html)** | the HTTP surface, with a client you can send requests from |
 | **[sempods-spec](https://github.com/sempods/sempods-spec)** | the specification's repository — the contract, not one implementation of it |
 | **[sempods-kotlin](https://github.com/sempods/sempods-kotlin)** | the reference implementation for the JVM, [on Maven Central](https://central.sonatype.com/search?q=org.sempods) |
 | **[schema.sempods.org](https://schema.sempods.org)** | the vocabulary — the few terms sempods adds to the ones that already exist |
 | **[Discussions](https://github.com/sempods/sempods-kotlin/discussions)** | questions, ideas, and what is being decided |
-
-### Built on it
-
-- **Focus** ([apps.sempods.org/focus](https://apps.sempods.org/focus)) — task management with
-  natural language input, storing everything in a pod its user owns.
 
 ### Status
 
