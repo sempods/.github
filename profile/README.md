@@ -1,48 +1,65 @@
-# sempods — Personal Data Pods for a Decentralized Web
+# sempods — your data belongs to you
 
-Today, every app stores your data in its own silo. Your calendar lives in Google, your
-tasks in Todoist, your notes in Notion — and none of them can talk to each other unless
-someone builds an integration. When that integration breaks (and it does), your data is
-stranded. sempods inverts this: instead of scattering data across apps, you have a
-**pod** — a self-hosted data space where apps come to your data. What distinguishes
-sempods is how access and interoperability work in practice — through a radically
-simple permission model built on a single primitive.
+Every app wants to become the place where your data lives. Your calendar in one silo, your
+tasks in another, your notes in a third — and nothing moves between them unless somebody
+builds and maintains an integration. When it breaks, and it does, the data is stranded.
 
-A pod stores data as **structured, meaningful information** using W3C Semantic Web
-standards. An event isn't a row in a database — it's a `schema:Event` with a name,
-a date, and a location, described in a vocabulary (like schema.org, Dublin Core, or
-FOAF) that any software can understand. This isn't a new format invented by sempods:
-it uses RDF (the W3C standard for structured data), JSON-LD (RDF expressed as JSON),
-and SPARQL (a query language for RDF). These are established, open standards — sempods
-composes them into a practical system.
+**sempods takes the opposite route.** The data goes in a pod you control. The apps come to
+it. An event is not a row in one company's database — it is a thing on the web, with a URI,
+described in vocabulary anyone already understands.
 
-Because all data shares the same semantic foundation, **interoperability is not
-engineered between apps — it emerges from the architecture.** Apps never interact with
-each other — they only interact with data. An event created by one app is immediately
-queryable by any other app or tool that understands the same vocabulary — without
-adapters, without API mappings, without coordination.
+Interoperability then stops being something you engineer between apps. Two apps that have
+never heard of each other work on the same data, because there is nothing between them to
+integrate.
 
-Data is organized in **contexts** (named graphs) with a simple permission model:
-read, write, manage — per context. Apps authenticate via OAuth 2.0 with DID-based
-identity verification. Each app gets access to exactly its own context. The pod owner
-controls who gets access to what. Every pod is an independent node publishing Linked
-Open Data via HTTP URIs — each new deployment extends a decentralized knowledge graph
-across the web.
+### It is running
 
-### Working system
+A venue in Chemnitz publishes its events from its own pod. No account, no key, no mock:
 
-A working system exists with real users and real data:
+```bash
+curl -X POST https://sempods.org/aaltra/_system/sparql/query \
+  -H "Content-Type: application/sparql-query" \
+  -H "Accept: application/sparql-results+json" \
+  --data 'PREFIX schema: <https://schema.org/>
+          SELECT ?e ?name ?start WHERE {
+            ?e a schema:Event ; schema:name ?name ; schema:startDate ?start
+          } ORDER BY ?start LIMIT 3'
+```
 
-- **Eventer** ([console.eventer.app](https://console.eventer.app)) — decentralized event platform with Linked Open Data
-- **Focus** ([apps.sempods.org/focus](https://apps.sempods.org/focus)) — task management with natural language input
-- **w2d2d** ([w2d2d.eventer.app](https://w2d2d.eventer.app)) — social coordination across independent pods
+Those are real events, served as Linked Open Data. Every one has its own URI — follow it and
+you get the resource, not an API response shaped for one client.
 
-These apps were built independently — yet they interoperate because they share the same semantic foundation.
+### Start here
+
+| | |
+|---|---|
+| **[www.sempods.org](https://www.sempods.org)** | what this is, and why — start here if you are new |
+| **[spec.sempods.org](https://spec.sempods.org)** | the specification: what a pod must do, 313 requirements over six core chapters and three modules |
+| **[Try the API](https://spec.sempods.org/api/index.html)** | the HTTP surface, with a client you can send requests from |
+| **[sempods-spec](https://github.com/sempods/sempods-spec)** | the specification's repository — the contract, not one implementation of it |
+| **[sempods-kotlin](https://github.com/sempods/sempods-kotlin)** | the reference implementation for the JVM, [on Maven Central](https://central.sonatype.com/search?q=org.sempods) |
+| **[schema.sempods.org](https://schema.sempods.org)** | the vocabulary — the few terms sempods adds to the ones that already exist |
+| **[Discussions](https://github.com/sempods/sempods-kotlin/discussions)** | questions, ideas, and what is being decided |
+
+### Built on it
+
+- **Focus** ([apps.sempods.org/focus](https://apps.sempods.org/focus)) — task management with
+  natural language input, storing everything in a pod its user owns.
 
 ### Status
 
-sempods is currently being open-sourced with support from [NLnet](https://nlnet.nl/) (NGI Zero Commons Fund, applied). The server, client SDK, documentation, and community infrastructure are being prepared for public release.
+`0.x`, one maintainer, and pods serving real data in production. The specification is
+extracted from the reference implementation today; at the `0.1` tag that reverses and the
+implementation follows the specification instead.
+
+What does not exist yet: a conformance suite, so nobody can *prove* an implementation
+conformant — including this one.
 
 ### License
 
-Apache 2.0 (code) · CC BY 4.0 (documentation)
+Code is Apache 2.0. The specification, documentation and vocabulary are CC BY 4.0.
+
+"sempods" is a trademark of Danilo Stein. The Apache License grants no trademark rights;
+[TRADEMARKS.md](https://github.com/sempods/sempods-kotlin/blob/main/TRADEMARKS.md) says what
+you may call your own work, and is deliberately permissive — the name is regulated only where
+it would suggest origin or endorsement.
