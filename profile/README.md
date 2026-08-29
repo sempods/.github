@@ -40,6 +40,7 @@ you get the resource, not an API response shaped for one client.
 | **[sempods-kotlin](https://github.com/sempods/sempods-kotlin)** | the reference implementation for the JVM, [on Maven Central](https://central.sonatype.com/search?q=org.sempods) |
 | **[schema.sempods.org](https://schema.sempods.org)** | the vocabulary — the few terms sempods adds to the ones that already exist |
 | **[Discussions](https://github.com/sempods/sempods-kotlin/discussions)** | questions, ideas, and what is being decided |
+| **[Announcement](https://github.com/sempods/sempods-kotlin/discussions/59)** | eight years in: what is open today, and what comes next |
 
 ### Status
 
