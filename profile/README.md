@@ -12,6 +12,11 @@ Interoperability then stops being something you engineer between apps. Two apps 
 never heard of each other work on the same data, because there is nothing between them to
 integrate.
 
+The stack is familiar on purpose. sempods does not invent a new graph database, query language or
+auth world. It composes HTTP, RDF, JSON-LD, SPARQL, OAuth/OIDC and MCP into one pod contract:
+resources have stable web addresses, every statement lives in a permissioned context, and apps,
+websites and agents all meet the same server-enforced rules.
+
 ### It is running
 
 A venue in Chemnitz publishes its events from its own pod. No account, no key, no mock:
