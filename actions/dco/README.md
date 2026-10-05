@@ -6,7 +6,9 @@ all sempods repositories. One implementation, tested here, used everywhere.
 
 ## Use it in a repository
 
-Add `.github/workflows/dco.yml`, pinned to a commit of this repository:
+In a new repository, choose **Actions → New workflow → DCO sign-off** (the
+organisation's workflow template), or add `.github/workflows/dco.yml`, pinned to
+a commit of this repository:
 
 ```yaml
 name: DCO

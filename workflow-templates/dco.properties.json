@@ -1,0 +1,6 @@
+{
+  "name": "DCO sign-off",
+  "description": "Checks that every pull-request commit carries a Signed-off-by matching its author, using the shared sempods action.",
+  "iconName": "octicon shield-check",
+  "categories": ["Automation"]
+}
