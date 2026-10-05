@@ -79,6 +79,8 @@ must change) and move the pin in `workflow-templates/dco.yml` to that tag's
 commit. Dependabot then proposes the new pin in every calling repository with
 its next run. Run it early with *Insights → Dependency graph → Dependabot →
 Check for updates*, or, for an urgent fix, move the pins by hand with one small
-pull request per repository. A pull request whose check still runs an old pin is
-fixed by moving the pin in that pull request, or by rerunning the check once the
-new pin is on `main`.
+pull request per repository. A pull request whose check still runs an old pin
+needs a new run: move the pin in that pull request, or, once the new pin is on
+`main`, update the pull request's branch (rebase, or **Update branch**, which the
+current version accepts). Re-running the old check does not help, because a
+re-run keeps the original commit and therefore the old pin.
