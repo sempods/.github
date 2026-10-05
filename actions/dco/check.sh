@@ -54,6 +54,12 @@ if ((count >= 250)); then
   exit 1
 fi
 
+is_github_web_merge() { # commit-json
+  [[ "$(jq -r '[(.parents | length) > 1, .commit.committer.name == "GitHub",
+    .commit.committer.email == "noreply@github.com",
+    .commit.verification.verified == true] | all' <<<"$1")" == "true" ]]
+}
+
 missing=""
 for i in $(seq 0 $((count - 1))); do
   commit="$(jq -c ".[$i]" <<<"$commits")"
@@ -62,7 +68,12 @@ for i in $(seq 0 $((count - 1))); do
   email="$(jq -r '.commit.author.email' <<<"$commit")"
   is_bot_commit "$name" "$email" "$PR_AUTHOR" "$PR_AUTHOR_TYPE" && continue
   # Merge commits are checked too: a merge can carry conflict resolutions or
-  # other changes of its own.
+  # other changes of its own. The exception is a merge that GitHub itself
+  # created for a signed-in user ("Update branch" in a pull request): GitHub
+  # adds no sign-off there. GitHub is then the committer and its own signature
+  # is reported as verified; a self-signed look-alike with that committer
+  # address cannot be verified for it.
+  is_github_web_merge "$commit" && continue
   #
   # Only the author's own sign-off counts; another person cannot certify on
   # their behalf. Addresses are collected first (grep -q in a pipeline would

@@ -38,6 +38,11 @@ new release tags as pull requests; it does not move a pin to an untagged commit.
 - Commits of a bot are exempt only in a pull request that this bot account
   opened (for example Dependabot). GitHub authenticates the pull request's
   author; commit author fields are free text.
+- A merge commit that GitHub itself created for a signed-in user (the
+  **Update branch** button) is accepted without a sign-off, because GitHub adds
+  none there. It is recognised by GitHub as committer and by GitHub's own
+  signature being verified; a self-signed look-alike is not verified for that
+  address. Merges made locally need `git merge --signoff`, or rebase instead.
 - Commits are read from the GitHub API as data; nothing from the pull request is
   executed. Pull requests with 250 or more commits are refused rather than
   checked partially.
