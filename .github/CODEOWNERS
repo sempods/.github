@@ -1,0 +1,14 @@
+# Whom GitHub requests for review when a matching path changes. This assigns
+# reviewers; it does not require them. Last matching pattern wins.
+
+*                       @haed
+
+# Organisation-wide terms: licensing, sign-off, conduct and security reporting.
+/CONTRIBUTING.md        @haed
+/CODE_OF_CONDUCT.md     @haed
+/SECURITY.md            @haed
+/LICENSE                @haed
+
+# Shared actions run in every repository, and this file guards the rest.
+/actions/               @haed
+/.github/               @haed
