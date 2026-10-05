@@ -18,6 +18,14 @@ commit() {
   jq -cn --arg sha "$1" --argjson p "$2" --arg n "$3" --arg e "$4" --arg m "$5" \
     '{sha: $sha, parents: $p, commit: {author: {name: $n, email: $e}, message: $m}}'
 }
+# web-commit sha parents-json committer-name committer-email verified message:
+# shaped like the merge GitHub creates for "Update branch".
+web_commit() {
+  jq -cn --arg sha "$1" --argjson p "$2" --arg cn "$3" --arg ce "$4" --argjson v "$5" --arg m "$6" \
+    '{sha: $sha, parents: $p, commit: {author: {name: "Danilo Stein", email: "danilo@example.org"},
+      committer: {name: $cn, email: $ce}, verification: {verified: $v, reason: (if $v then "valid" else "unsigned" end)},
+      message: $m}}'
+}
 dependabot="49699333+dependabot[bot]@users.noreply.github.com"
 ada="1234+ada@users.noreply.github.com"
 signed() { printf '%s\n\nSigned-off-by: %s <%s>' "$1" "$2" "$3"; }
@@ -66,6 +74,18 @@ case_ "unsigned merge commit" 1 ada User \
   "$(commit b1 '[{},{}]' Ada "$ada" "Merge branch main")"
 case_ "signed-off merge commit" 0 ada User \
   "$(commit b2 '[{},{}]' Ada "$ada" "$(signed 'Merge branch main' Ada "$ada")")"
+case_ "GitHub's own Update-branch merge, signed by GitHub" 0 ada User \
+  "$(commit c1 '[{}]' Ada "$ada" "$(signed fix Ada "$ada")")" \
+  "$(web_commit c2 '[{},{}]' GitHub noreply@github.com true "Merge branch 'main' into topic")"
+case_ "Update-branch look-alike without GitHub's verified signature" 1 ada User \
+  "$(web_commit c3 '[{},{}]' GitHub noreply@github.com false "Merge branch 'main' into topic")"
+case_ "GitHub-committed change that is not a merge" 1 ada User \
+  "$(web_commit c4 '[{}]' GitHub noreply@github.com true "Edit file")"
+case_ "merge committed as GitHub with another address" 1 ada User \
+  "$(web_commit c5 '[{},{}]' GitHub github@example.org true "Merge branch 'main' into topic")"
+case_ "Update-branch merge in a Dependabot pull request" 0 'dependabot[bot]' Bot \
+  "$(commit c6 '[{}]' 'dependabot[bot]' "$dependabot" "bump")" \
+  "$(web_commit c7 '[{},{}]' GitHub noreply@github.com true "Merge branch 'main' into dependabot/x")"
 # Too large for a command-line argument, so the message comes from a file.
 {
   signed 'large squash' Ada "$ada"
