@@ -26,9 +26,20 @@ jobs:
 ```
 
 Pin the commit of a release tag and name the tag in the comment. Keep the job id
-`check`: the repository rulesets require a status check of that name. Dependabot
-does not propose updates for this path action (a manual *Check for updates*
-after v1.0.1 opened none), so pins move by hand; see below.
+`check`: the repository rulesets require a status check of that name.
+
+The `github-actions` entry of the repository's Dependabot configuration proposes
+new release tags of this action. By default Dependabot waits three days after a
+release (its cooldown). Our own reviewed releases need no waiting period, so
+exclude them, while third-party actions keep the cooldown:
+
+```yaml
+- package-ecosystem: 'github-actions'
+  # …
+  cooldown:
+    exclude:
+      - 'sempods/.github/*'
+```
 
 ## What it checks
 
@@ -64,8 +75,10 @@ it on Linux with GNU tools, and check themselves with the changed action.
 
 After a change to `actions/dco` is merged, tag `main` with the next semantic
 version (`v1.0.1` for fixes, `v1.1.0` for new behaviour, `v2.0.0` when callers
-must change). Then move the pin to that tag's commit in
-`workflow-templates/dco.yml` and, with one small pull request each, in every
-repository that calls the action (`.github/workflows/dco.yml`). A pull request
-whose check runs an old pin is fixed by moving the pin in that pull request or
-by rerunning the check after the pin is on `main`.
+must change) and move the pin in `workflow-templates/dco.yml` to that tag's
+commit. Dependabot then proposes the new pin in every calling repository with
+its next run. Run it early with *Insights → Dependency graph → Dependabot →
+Check for updates*, or, for an urgent fix, move the pins by hand with one small
+pull request per repository. A pull request whose check still runs an old pin is
+fixed by moving the pin in that pull request, or by rerunning the check once the
+new pin is on `main`.
