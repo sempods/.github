@@ -22,12 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: sempods/.github/actions/dco@<commit-sha> # main
+      - uses: sempods/.github/actions/dco@<commit-sha> # v1.0.0
 ```
 
-Keep the job id `check`: the repository rulesets require a status check of that
-name. A `github-actions` entry in the repository's Dependabot configuration
-keeps the pin current.
+Pin the commit of a release tag and name the tag in the comment. Keep the job id
+`check`: the repository rulesets require a status check of that name. A
+`github-actions` entry in the repository's Dependabot configuration proposes
+new release tags as pull requests; it does not move a pin to an untagged commit.
 
 ## What it checks
 
@@ -53,3 +54,10 @@ Run `actions/dco/test.sh` (needs `bash` and `jq`). It covers signed and unsigned
 commits, foreign sign-offs, unusual and empty addresses, bot exemptions and
 look-alikes, merge commits and very long trailer lists. Pull requests here run
 it on Linux with GNU tools, and check themselves with the changed action.
+
+## Release a change
+
+After a change to `actions/dco` is merged, tag `main` with the next semantic
+version (`v1.0.1` for fixes, `v1.1.0` for new behaviour, `v2.0.0` when callers
+must change) and update `workflow-templates/dco.yml` to that tag's commit.
+Dependabot then offers the new pin to every repository.
