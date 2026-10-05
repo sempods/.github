@@ -1,0 +1,20 @@
+name: DCO sign-off
+description: >-
+  Checks that every commit of the triggering pull request carries a
+  Signed-off-by line matching its author.
+inputs:
+  token:
+    description: Token that can read the pull request's commits; read-only is enough.
+    default: ${{ github.token }}
+runs:
+  using: composite
+  steps:
+    - name: Every commit carries the author's sign-off
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        REPO: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+      run: '"$GITHUB_ACTION_PATH/check.sh"'
